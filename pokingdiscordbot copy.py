@@ -7,7 +7,7 @@ import os
 
 bot = commands.Bot(command_prefix="+", intents=discord.Intents.all())
 
-TOKEN = commands.Bot(token=os.environ.get('token'))
+TOKEN = os.environ.get('token')
 
 stop_loop = False
 
