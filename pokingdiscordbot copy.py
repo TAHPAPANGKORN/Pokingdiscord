@@ -44,7 +44,7 @@ async def stop(ctx):
     stop_loop = True
 
   
-
+server_on():
 bot.run(TOKEN)
 
 
