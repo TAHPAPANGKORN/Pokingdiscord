@@ -22,8 +22,8 @@ async def on_ready(ctx):
 
 @bot.command()
 async def move(ctx, member:discord.Member,number) :
-    channel1 = bot.get_channel(927827825598267392)
-    channel2 = bot.get_channel(927827898298167367)
+    channel1 = bot.get_channel(1208770282245070991)
+    channel2 = bot.get_channel(1208776120582012978)
     original_channel = member.voice.channel
     global stop_loop
     for i in range(int(number)) :
