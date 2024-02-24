@@ -14,7 +14,7 @@ stop_loop = False
 @bot.event
 async def on_ready():
     print("Online!!")
-    channel = bot.get_channel(682225304991039573)
+    channel = bot.get_channel(1208761379146829908)
     await channel.send("Now Online!!")
 @bot.command()
 async def on_ready(ctx):
