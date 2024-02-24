@@ -1,2 +1,1 @@
-How to use
-+move @name number
+This is my first bot in Python
