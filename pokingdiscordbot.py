@@ -48,25 +48,4 @@ server_on()
 bot.run(TOKEN)
 
 
-# @bot.event
-# async def on_member_join(member):
-#     channel = bot.get_channel(1208761379146829907)
-#     text = f"welcom to the sever {member.mention}!"
-#     await channel.send(text)
 
-# @bot.event
-# async def on_member_remove(member):
-#     channel = bot.get_channel(1208761379146829907)
-#     text = f"see you again {member.mention}!"
-    
-#     await channel.send(text)
-# @bot.event
-# async def on_message(message):
-#     mes = message.content
-#     if mes == 'hi' :
-#         await message.channel.send("hi i here tah")
-#     await bot.process_commands(message)
-
-# @bot.command()
-# async def hi(ctx):
-#     await ctx.channel.send("test1")
