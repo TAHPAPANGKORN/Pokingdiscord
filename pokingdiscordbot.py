@@ -10,9 +10,10 @@ bot = commands.Bot(command_prefix="\\", intents=discord.Intents.all(),help_comma
 TOKEN = os.environ.get('token')
 
 
-
 status = ['Just Find A AFK Member','Move AKF Member']
 stop_loop = False
+numberChannal1 = 0
+numberChannel2 = 0
 
 @bot.event
 async def on_ready():
@@ -22,11 +23,15 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.idle,activity=discord.Game(status[0])) #bot status when start
     synced = await bot.tree.sync()
     print(f'{len(synced)} command(s)')
-    # channel = bot.get_channel(682225304991039573)
-    # await channel.send(text)
-    
-  
 
+    
+@bot.command(aliases=['set'])  
+async def _set(ctx, new_numberChannal1, new_numberChannel2):
+    global numberChannal1, numberChannel2
+    numberChannal1 = int(new_numberChannal1)
+    numberChannel2 = int(new_numberChannel2)
+    await ctx.send("Room set")
+    print(f"room1 = {numberChannal1} room2 = {numberChannel2}")
 
 @bot.command(aliases=['ready','start'])
 async def _ready(ctx):
@@ -35,9 +40,9 @@ async def _ready(ctx):
     
 @bot.command(aliases=['help','helpme','hp'])
 async def _help(ctx):
-    emmbed = discord.Embed(
+    emmbed = discord.Embed(   
         title='Help Me! - Bot Commands',
-        description='**Commands with "\\\\" prefix :**\n\help\n\move @name Set number of times\n\stop\n\n'
+        description='**Commands with "\\\\" prefix :**\n\help\n\move @name Set number of times\n\stop\n\set channel1 channel2\n\n'
                     '**Slash Commands with "/" prefix :**\n/move\n/stop\n/help',
         color=0x88FFF,
         timestamp=discord.utils.utcnow()
@@ -50,7 +55,7 @@ async def _help(ctx):
 async def helpCommand(ctx):
     emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
-        description='**Commands with "\\\\" prefix :**\n\help\n\move @name Set number of times\n\stop\n\n'
+        description='**Commands with "\\\\" prefix :**\n\help\n\move @name Set number of times\n\stop\n\set channel1 channel2\n\n'
                     '**Slash Commands with "/" prefix :**\n/move\n/stop\n/help',
         color=0x88FFF,
         timestamp=discord.utils.utcnow()
@@ -58,11 +63,11 @@ async def helpCommand(ctx):
     await ctx.response.send_message(embed=emmbed)
 
 
-
 @bot.tree.command(name='move', description='Move Some Member')
 async def moveCommand(ctx, member:discord.Member,number : int):
-    channel1 = bot.get_channel(1208770282245070991)
-    channel2 = bot.get_channel(1208776120582012978)
+    global  numberChannal1, numberChannel2,stop_loop
+    channel1 = bot.get_channel(numberChannal1)
+    channel2 = bot.get_channel(numberChannel2)
     original_channel = member.voice.channel
     global stop_loop
     for i in range(int(number)) :    
@@ -83,10 +88,10 @@ async def moveCommand(ctx, member:discord.Member,number : int):
 
 @bot.command()
 async def move(ctx, member:discord.Member,number) :
-    channel1 = bot.get_channel(1208770282245070991)
-    channel2 = bot.get_channel(1208776120582012978)
+    global  numberChannal1, numberChannel2,stop_loop
+    channel1 = bot.get_channel(numberChannal1)
+    channel2 = bot.get_channel(numberChannel2)
     original_channel = member.voice.channel
-    global stop_loop
     for i in range(int(number)) :    
         if stop_loop:
             await ctx.send("stop")
