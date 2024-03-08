@@ -14,6 +14,7 @@ status = ['Just Find A AFK Member','Move AKF Member']
 stop_loop = False
 numberChannal1 = 0
 numberChannel2 = 0
+check = False
 
 @bot.event
 async def on_ready():
@@ -27,9 +28,10 @@ async def on_ready():
     
 @bot.command(aliases=['set'])  
 async def _set(ctx, new_numberChannal1, new_numberChannel2):
-    global numberChannal1, numberChannel2
+    global numberChannal1, numberChannel2,check
     numberChannal1 = int(new_numberChannal1)
     numberChannel2 = int(new_numberChannel2)
+    check  = True
     await ctx.send("Room set")
     print(f"room1 = {numberChannal1} room2 = {numberChannel2}")
 
@@ -65,13 +67,11 @@ async def helpCommand(ctx):
 
 @bot.tree.command(name='move', description='Move Some Member')
 async def moveCommand(ctx, member:discord.Member,number : int):
-    global  numberChannal1, numberChannel2,stop_loop    
-    channel1 = bot.get_channel(numberChannal1)
-    channel2 = bot.get_channel(numberChannel2)
+    global  numberChannal1, numberChannel2,stop_loop,channel1,channel2  
     original_channel = member.voice.channel
-    if numberChannal1 or numberChannel2 == 0 :
-        numberChannal1 = int(1213543702820163664) 
-        numberChannel2 = int(1213543871926243379) 
+    if  check == True :
+        channel1 = bot.get_channel(numberChannal1)
+        channel2 = bot.get_channel(numberChannel2)  
         for i in range(int(number)) :    
             if stop_loop == True:
                 await ctx.channel.send("stop")
@@ -83,20 +83,39 @@ async def moveCommand(ctx, member:discord.Member,number : int):
             await member.move_to(channel2)
             await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
             print(i+1,end=" ")
-            
+    
         await member.move_to(original_channel)
         await bot.change_presence(activity=discord.Game(status[0]))
+    elif check == False :
+        numberChannal1 = int(1213543702820163664) 
+        numberChannel2 = int(1213543871926243379) 
+        channel1 = bot.get_channel(numberChannal1)
+        channel2 = bot.get_channel(numberChannel2)
+        for i in range(int(number)) :    
+            if stop_loop == True:
+                await ctx.channel.send("stop")
+                await member.move_to(original_channel)
+                stop_loop = False  
+                break
+            await member.move_to(channel1)
+            await asyncio.sleep(0.5)
+            await member.move_to(channel2)
+            await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
+            print(i+1,end=" ")
+    
+        await member.move_to(original_channel)
+        await bot.change_presence(activity=discord.Game(status[0]))
+    else :
+        await ctx.channel.send("Please set(\set) a room for poking or /help")
+        
 
 @bot.command()
 async def move(ctx, member:discord.Member,number) :
-    global  numberChannal1, numberChannel2,stop_loop
-    channel1 = bot.get_channel(numberChannal1)
-    channel2 = bot.get_channel(numberChannel2)
+    global  numberChannal1, numberChannel2,stop_loop,channel1,channel2  
     original_channel = member.voice.channel
-    print(type(channel1))
-    if numberChannal1 or numberChannel2 == 0 :
-        numberChannal1 = int(1213543702820163664) 
-        numberChannel2 = int(1213543871926243379) 
+    if  check == True :
+        channel1 = bot.get_channel(numberChannal1)
+        channel2 = bot.get_channel(numberChannel2)  
         for i in range(int(number)) :    
             if stop_loop == True:
                 await ctx.channel.send("stop")
@@ -108,9 +127,30 @@ async def move(ctx, member:discord.Member,number) :
             await member.move_to(channel2)
             await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
             print(i+1,end=" ")
-            
+    
         await member.move_to(original_channel)
         await bot.change_presence(activity=discord.Game(status[0]))
+    elif check == False :
+        numberChannal1 = int(1213543702820163664) 
+        numberChannel2 = int(1213543871926243379) 
+        channel1 = bot.get_channel(numberChannal1)
+        channel2 = bot.get_channel(numberChannel2)
+        for i in range(int(number)) :    
+            if stop_loop == True:
+                await ctx.channel.send("stop")
+                await member.move_to(original_channel)
+                stop_loop = False  
+                break
+            await member.move_to(channel1)
+            await asyncio.sleep(0.5)
+            await member.move_to(channel2)
+            await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
+            print(i+1,end=" ")
+    
+        await member.move_to(original_channel)
+        await bot.change_presence(activity=discord.Game(status[0]))
+    else :
+        await ctx.channel.send("Please set(\set) a room for poking or /help")
 
 
 @bot.command()
