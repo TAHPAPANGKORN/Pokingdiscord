@@ -65,25 +65,41 @@ async def helpCommand(ctx):
 
 @bot.tree.command(name='move', description='Move Some Member')
 async def moveCommand(ctx, member:discord.Member,number : int):
-    global  numberChannal1, numberChannel2,stop_loop
+    global  numberChannal1, numberChannel2,stop_loop    
     channel1 = bot.get_channel(numberChannal1)
     channel2 = bot.get_channel(numberChannel2)
     original_channel = member.voice.channel
-    global stop_loop
-    for i in range(int(number)) :    
-        if stop_loop == True:
-            await ctx.channel.send("stop")
-            await member.move_to(original_channel)
-            stop_loop = False  
-            break
-        await member.move_to(channel1)
-        await asyncio.sleep(0.5)
-        await member.move_to(channel2)
-        await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
-        print(i+1,end=" ")
+    global stop_loop 
+    if channel1 and channel2 == None : 
+        for i in range(int(number)) :    
+            if stop_loop == True:
+                await ctx.channel.send("stop")
+                await member.move_to(original_channel)
+                stop_loop = False  
+                break
+            await member.move_to(1213543702820163664)
+            await asyncio.sleep(0.5)
+            await member.move_to(1213543871926243379)
+            await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
+            print(i+1,end=" ")
         
-    await member.move_to(original_channel)
-    await bot.change_presence(activity=discord.Game(status[0]))
+        await member.move_to(original_channel)
+        await bot.change_presence(activity=discord.Game(status[0]))
+    else :
+        for i in range(int(number)) :    
+            if stop_loop == True:
+                await ctx.channel.send("stop")
+                await member.move_to(original_channel)
+                stop_loop = False  
+                break
+            await member.move_to(channel1)
+            await asyncio.sleep(0.5)
+            await member.move_to(channel2)
+            await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
+            print(i+1,end=" ")
+            
+        await member.move_to(original_channel)
+        await bot.change_presence(activity=discord.Game(status[0]))
 
 
 @bot.command()
@@ -92,20 +108,36 @@ async def move(ctx, member:discord.Member,number) :
     channel1 = bot.get_channel(numberChannal1)
     channel2 = bot.get_channel(numberChannel2)
     original_channel = member.voice.channel
-    for i in range(int(number)) :    
-        if stop_loop:
-            await ctx.send("stop")
-            await member.move_to(original_channel)
-            stop_loop = False  
-            break
-        await member.move_to(channel1)
-        await asyncio.sleep(0.5)
-        await member.move_to(channel2)
-        await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
-        print(i+1,end=" ")
-        
-    await member.move_to(original_channel)
-    await bot.change_presence(activity=discord.Game(status[0]))
+    if channel1 and channel2 == None : 
+        for i in range(int(number)) :    
+            if stop_loop == True:
+                await ctx.channel.send("stop")
+                await member.move_to(original_channel)
+                stop_loop = False  
+                break
+            await member.move_to(1213543702820163664)
+            await asyncio.sleep(0.5)
+            await member.move_to(1213543871926243379)
+            await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
+            print(i+1,end=" ")
+
+        await member.move_to(original_channel)
+        await bot.change_presence(activity=discord.Game(status[0]))
+    else :
+        for i in range(int(number)) :    
+            if stop_loop == True:
+                await ctx.channel.send("stop")
+                await member.move_to(original_channel)
+                stop_loop = False  
+                break
+            await member.move_to(channel1)
+            await asyncio.sleep(0.5)
+            await member.move_to(channel2)
+            await bot.change_presence(activity=discord.Game(status[1])) #bot status when move some person
+            print(i+1,end=" ")
+            
+        await member.move_to(original_channel)
+        await bot.change_presence(activity=discord.Game(status[0]))
 
 
 @bot.command()
