@@ -70,7 +70,7 @@ async def moveCommand(ctx, member:discord.Member,number : int):
     channel2 = bot.get_channel(numberChannel2)
     original_channel = member.voice.channel
     global stop_loop 
-    if channel1 and channel2 == None : 
+    if channel1 and channel2 == 0 : 
         for i in range(int(number)) :    
             if stop_loop == True:
                 await ctx.channel.send("stop")
@@ -108,7 +108,7 @@ async def move(ctx, member:discord.Member,number) :
     channel1 = bot.get_channel(numberChannal1)
     channel2 = bot.get_channel(numberChannel2)
     original_channel = member.voice.channel
-    if channel1 and channel2 == None : 
+    if channel1 and channel2 == 0 : 
         for i in range(int(number)) :    
             if stop_loop == True:
                 await ctx.channel.send("stop")
