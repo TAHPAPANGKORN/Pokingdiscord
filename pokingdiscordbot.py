@@ -10,7 +10,7 @@ bot = commands.Bot(command_prefix="\\", intents=discord.Intents.all(),help_comma
 TOKEN = os.environ.get('token')
 
 
-status = ['Just Find A AFK Member','Move AKF Member']
+status = ['Just Find A AFK Member','Move AFK Member']
 stopLoop = None
 
 
@@ -32,13 +32,14 @@ async def _ready(ctx):
 
 #--------- help ---------
 def emmbedShow():
-    emmbed = discord.Embed(   
+    emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
         description='**Commands with "\\\\" prefix :**\n\help\n\stop\n\n'
-                    '**Slash Commands with "/" prefix :**\n/help\n/move\n/stop\n/tah',
+                    '**Slash Commands with "/" prefix :**\n/help\n/move\n/stop\n/tah\n\n',
         color=0x88FFF,
         timestamp=discord.utils.utcnow()
     )
+    emmbed.add_field(name="⚠️ Important :", value="**ถ้าคนที่ poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ**", inline=False)
     return emmbed
 
 @bot.command(aliases=['help','help_me','hp'])
@@ -67,7 +68,7 @@ async def wakeMove(ctx, member: discord.Member, number: int):
         return
     original_channel = member.voice.channel
     try:
-        await ctx.channel.send(f"{ctx.user.name} move {member.mention}")
+        await ctx.channel.send(f"{ctx.user.name} move {member.mention} {number} times")
         channel1 = await ctx.guild.create_voice_channel("ปลุก 1")
         channel2 = await ctx.guild.create_voice_channel("ปลุก 2")
 
