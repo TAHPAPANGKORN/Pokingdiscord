@@ -111,7 +111,7 @@ async def moveCommand(ctx, member:discord.Member,number : int):
         await bot.change_presence(activity=discord.Game(status[0]))
     else :
         await ctx.channel.send("Please set(\set) a room for poking or /help")
-
+    return 
 
 
 @bot.command()
@@ -156,6 +156,8 @@ async def move(ctx, member:discord.Member,number) :
         await bot.change_presence(activity=discord.Game(status[0]))
     else :
         await ctx.channel.send("Please set(\set) a room for poking or /help")
+        
+    return 
 #--------- end move ---------
 
 
