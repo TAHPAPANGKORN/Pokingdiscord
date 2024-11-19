@@ -47,8 +47,8 @@ async def _ready(ctx):
 async def _help(ctx):
     emmbed = discord.Embed(   
         title='Help Me! - Bot Commands',
-        description='**Commands with "\\\\" prefix :**\n\help\n\move @name Set number of times\n\stop\n\set channel1 channel2\n\calltah\n\n'
-                    '**Slash Commands with "/" prefix :**\n/move\n/stop\n/help\n/calltah',
+        description='**Commands with "\\\\" prefix :**\n\help\n\move @name Set number of times\n\stop\n\set channel1 channel2\n\\tah\n\n'
+                    '**Slash Commands with "/" prefix :**\n/move\n/stop\n/help\n/tah',
         color=0x88FFF,
         timestamp=discord.utils.utcnow()
     )
@@ -59,8 +59,8 @@ async def _help(ctx):
 async def helpCommand(ctx):
     emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
-        description='**Commands with "\\\\" prefix :**\n\help\n\move @name Set number of times\n\stop\n\set channel1 channel2\n\calltah\n\n'
-                    '**Slash Commands with "/" prefix :**\n/move\n/stop\n/help\n/calltah',
+        description='**Commands with "\\\\" prefix :**\n\help\n\move @name Set number of times\n\stop\n\set channel1 channel2\n\\tah\n\n'
+                    '**Slash Commands with "/" prefix :**\n/move\n/stop\n/help\n/tah',
         color=0x88FFF,
         timestamp=discord.utils.utcnow()
     )
