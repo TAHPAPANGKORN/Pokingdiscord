@@ -35,11 +35,11 @@ def emmbedShow():
     emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
         description='**Commands with "\\\\" prefix :**\n\help\n\stop\n\n'
-                    '**Slash Commands with "/" prefix :**\n/help\n/move\n/stop\n/tah\n\n',
+                    '**Slash Commands with "/" prefix :**\n/help\n/move\n/stop\n/tah\n\n'
+                    '**⚠️ Important:\n ถ้าคนที่ poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ**\n',
         color=0x88FFF,
         timestamp=discord.utils.utcnow()
     )
-    emmbed.add_field(name="⚠️ Important :", value="**ถ้าคนที่ poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ**", inline=False)
     return emmbed
 
 @bot.command(aliases=['help','help_me','hp'])
