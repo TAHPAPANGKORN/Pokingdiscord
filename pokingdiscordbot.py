@@ -160,7 +160,7 @@ async def move(ctx, member:discord.Member,number) :
 
 
 #--------- call tah ---------
-@bot.command(aliases=['calltah'])
+@bot.command(aliases=['tah'])
 async def callTah(ctx, member: discord.Member = None):
     tahId = 577053817674268673  # User ID as an integer
     tahMember = ctx.guild.get_member(tahId)  # Fetch the Member object
@@ -185,7 +185,7 @@ async def callTah(ctx, member: discord.Member = None):
     else:
         await ctx.send(f"{tah if tahMember else {tah}} not in voice channel")
 
-@bot.tree.command(name='calltah', description='Call cheetah to your room')
+@bot.tree.command(name='tah', description='Call cheetah to your room')
 async def callTah(ctx: discord.Interaction):
     tahId = 577053817674268673  # User ID as an integer
     tahMember = ctx.guild.get_member(tahId)  # Fetch the Member object
