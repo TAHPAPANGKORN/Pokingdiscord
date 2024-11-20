@@ -2,7 +2,7 @@ import os
 from myserver import server_on
 import discord
 from discord.ext import commands
-from discord import app_commands
+from discord import app_commands, Forbidden
 import discord.utils
 import asyncio
 from datetime import datetime, timedelta
@@ -155,6 +155,20 @@ async def wakeMove(ctx: discord.Interaction, member: discord.Member, number: int
         stopLoop = False
         await member.move_to(originalChannel)
         await member.send(f"{member.mention} We tried to wake you up!")
+    except Forbidden:
+        await ctx.followup.send(f"You must have given the bot permission in your private room.")
+        # Choose an existing voice channel to move the member to (e.g., "General" or any channel in the server)
+        existingCannel = None
+        for channel in ctx.guild.voice_channels:
+            # Check if the bot has permission to move members in this channel
+            if channel.permissions_for(ctx.guild.me).move_members:
+                existingCannel = channel
+                break
+        if existingCannel:
+            await member.move_to(existingCannel)
+            await ctx.followup.send(f"{member.mention} has been moved to {existingCannel.name}.")
+        else:
+            await ctx.followup.send("No suitable channel found to move the member.")
     except Exception as e:
         await ctx.followup.send(f"Error: {e}")
     finally:
