@@ -35,7 +35,7 @@ def emmbedShow():
     emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
         description='**Commands with "\\\\" prefix :**\n\help\n\stop\n\n'
-                    '**Slash Commands with "/" prefix :**\n/help\n/move\n/stop\n/tah\n\n'
+                    '**Slash Commands with "/" prefix :**\n/help\n/move\n/stop\n/link\n\n'
                     '**⚠️ Important:\n ถ้าคนที่ poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ**\n',
         color=0x88FFF,
         timestamp=discord.utils.utcnow()
@@ -94,6 +94,26 @@ async def wakeMove(ctx, member: discord.Member, number: int):
         await channel2.delete()
 #--------- end move ---------
 
+#--------- link ---------
+@bot.tree.command(name='link', description='Get Link To Invite')
+async def sendLink(ctx):
+    # Create the embed
+    emmbed = discord.Embed(
+        title='Link for Invite',
+        description='Click the button below to copy the link.',
+        color=0x88FFF,
+        timestamp=discord.utils.utcnow()
+    )
+    # Create a button
+    view = discord.ui.View()
+    button = discord.ui.Button(
+        label="Copy Link", 
+        style=discord.ButtonStyle.link, 
+        url='https://discord.com/oauth2/authorize?client_id=1208764608727359601&permissions=16778256&integration_type=0&scope=bot'
+    )
+    view.add_item(button)
+    await ctx.user.send(embed=emmbed, view=view)
+#--------- end link ---------
 
 #--------- call tah ---------
 @bot.tree.command(name='tah', description='Call cheetah to your room')
