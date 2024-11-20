@@ -30,7 +30,7 @@ async def _ready(ctx):
     await ctx.send("online")
 #--------- end check ---------
     
-
+print("help")
 #--------- help ---------
 embedColor = 0xAC7BB8
 def emmbedShow():
