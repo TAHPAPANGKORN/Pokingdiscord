@@ -6,6 +6,7 @@ from discord import app_commands
 import discord.utils
 import asyncio
 from datetime import datetime, timedelta
+import pytz
 
 bot = commands.Bot(command_prefix="\\", intents=discord.Intents.all(),help_command=None)
 
@@ -167,7 +168,7 @@ async def wakeMove(ctx: discord.Interaction, member: discord.Member, number: int
 @bot.tree.command(name="micmute", description="Set a timer.")
 async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, unit: str = 's'):  
      
-    now = datetime.now()
+    now = datetime.now(pytz.timezone('Asia/Bangkok'))
     units = {'s': 'seconds', 'm': 'minutes', 'h': 'hours'}
 
     if unit not in units:
@@ -185,7 +186,7 @@ async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, 
     if member.voice:
         try:
             await member.edit(mute=True)
-            await ctx.followup.send(f"You mute {member.mention} until {targetTime.strftime('%H:%M:%S')}")
+            await ctx.followup.send(f"You mute {member.mention} until {targetTime.strftime('%H:%M:%S')} UTC+7")
             await discord.utils.sleep_until(targetTime)
             await member.edit(mute=False)
             await ctx.followup.send(f"Unmute! {member.mention}")
@@ -199,7 +200,7 @@ async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, 
 @bot.tree.command(name="headphonemute", description="Set a timer.")
 async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, unit: str = 's'):  
      
-    now = datetime.now()
+    now = datetime.now(pytz.timezone('Asia/Bangkok'))
     units = {'s': 'seconds', 'm': 'minutes', 'h': 'hours'}
 
     if unit not in units:
@@ -217,7 +218,7 @@ async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, 
     if member.voice:
         try:
             await member.edit(deafen=True)
-            await ctx.followup.send(f"You mute {member.mention} until {targetTime.strftime('%H:%M:%S')}")
+            await ctx.followup.send(f"You mute {member.mention} until {targetTime.strftime('%H:%M:%S')} UTC+7")
             await discord.utils.sleep_until(targetTime)
             await member.edit(deafen=False)
             await ctx.followup.send(f"Unmute! {member.mention}")
