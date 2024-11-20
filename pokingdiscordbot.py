@@ -72,6 +72,7 @@ async def _help(ctx: discord.Interaction):
 #--------- end help ---------
 
 #--------- link ---------
+botLink = "https://discord.com/oauth2/authorize?client_id=1208764608727359601&permissions=29361168&integration_type=0&scope=bot"
 @bot.tree.command(name='invite', description='Get Link To Invite')
 async def sendLink(ctx: discord.Interaction):
     await ctx.response.defer(ephemeral=True)
@@ -88,14 +89,14 @@ async def sendLink(ctx: discord.Interaction):
     button1 = discord.ui.Button(
         label="Invite bot", 
         style=discord.ButtonStyle.link, 
-        url='https://discord.com/oauth2/authorize?client_id=1208764608727359601&permissions=16778256&integration_type=0&scope=bot'
+        url = botLink
     )
     
     # btn-2
     async def button2Callback(interaction: discord.Interaction):
         # Send a follow-up message when button2 is clicked
         await interaction.response.send_message(
-            "Here is the invite link for the bot: https://discord.com/oauth2/authorize?client_id=1208764608727359601&permissions=16778256&integration_type=0&scope=bot", 
+            f"Here is the invite link for the bot: {botLink}", 
             ephemeral=True
         )
     button2 = discord.ui.Button(
