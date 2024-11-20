@@ -34,7 +34,7 @@ def emmbedShow():
     text = [["/help", ": Provides help or detailed information about available commands."],
             ["/move", ": Used to wake up friends."],
             ["/stop", ": Stops or cancels the current process or action of the bot."],
-            ["/link", ": Generates or shares a specific link or connection."]]
+            ["/invite", ": Generates or shares a specific link or connection."]]
     
     emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
