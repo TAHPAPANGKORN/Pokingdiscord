@@ -1,9 +1,11 @@
+import os
+from myserver import server_on
 import discord
 from discord.ext import commands
 from discord import app_commands
+import discord.utils
 import asyncio
-from myserver import server_on
-import os
+from datetime import datetime, timedelta
 
 bot = commands.Bot(command_prefix="\\", intents=discord.Intents.all(),help_command=None)
 
@@ -30,20 +32,29 @@ async def _ready(ctx):
     
 
 #--------- help ---------
+embedColor = 0xAC7BB8
 def emmbedShow():
     text = [["/help", ": Provides help or detailed information about available commands."],
             ["/move", ": Used to wake up friends."],
             ["/stop", ": Stops or cancels the current process or action of the bot."],
-            ["/invite", ": Generates or shares a specific link or connection."]]
+            ["/invite", ": Generates or shares a specific link or connection."],
+            ["/micmute", ": Mute microphone with a timer."],
+            ["/headphonemute", ": Mute the headphones with a timer."]]
     
     emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
         description=f'**Commands with "\\\\" prefix :**\n**\help**{text[0][1]}\n**\stop**{text[2][1]}\n\n'
                     f'**Recommend** ↓\n'
-                    f'**Slash Commands with "/" prefix : **\n**{text[0][0]}**{text[0][1]}\n**{text[1][0]}**{text[1][1]}\n**{text[2][0]}**{text[2][1]}\n**{text[3][0]}**{text[3][1]}\n\n'
-                    '**⚠️ Important :\n ถ้าคนที่ Poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ**\n',
-        color=0x88FFF,
-        timestamp=discord.utils.utcnow()
+                    f'**Slash Commands with "/" prefix :**\n'
+                    f'**{text[0][0]}** {text[0][1]}\n'
+                    f'**{text[1][0]}** {text[1][1]}\n'
+                    f'**{text[2][0]}** {text[2][1]}\n'
+                    f'**{text[3][0]}** {text[3][1]}\n'
+                    f'**{text[4][0]}** {text[4][1]}\n'
+                    f'**{text[5][0]}** {text[5][1]}\n'
+                    '\n**⚠️ Important :\n ถ้าคนที่ Poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ**\n',
+        color = embedColor,
+        timestamp = discord.utils.utcnow()
     )
     return emmbed
 
@@ -68,17 +79,19 @@ async def sendLink(ctx: discord.Interaction):
     emmbed = discord.Embed(
         title='Link for invite this bot',
         description='Click the button below to invite bot.',
-        color=0x88FFF,
+        color=0xAC7BB8,
         timestamp=discord.utils.utcnow()
     )
     # Create a button
     view = discord.ui.View()
+    # btn-1
     button1 = discord.ui.Button(
         label="Invite bot", 
         style=discord.ButtonStyle.link, 
         url='https://discord.com/oauth2/authorize?client_id=1208764608727359601&permissions=16778256&integration_type=0&scope=bot'
     )
     
+    # btn-2
     async def button2Callback(interaction: discord.Interaction):
         # Send a follow-up message when button2 is clicked
         await interaction.response.send_message(
@@ -90,9 +103,16 @@ async def sendLink(ctx: discord.Interaction):
         style=discord.ButtonStyle.primary
     )
     button2.callback = button2Callback
+    # btn-3
+    button3 = discord.ui.Button(
+            label="Youtube link", 
+            style=discord.ButtonStyle.danger, 
+            url='https://youtu.be/CVENTfDYJRs?si=LM7d4s3YcyujXG-T'
+        )    
 
     # Add buttons to the view
     view.add_item(button1)
+    view.add_item(button3)
     view.add_item(button2)
     await ctx.followup.send(embed=emmbed, view=view, ephemeral=True)
 #--------- end link ---------
@@ -142,7 +162,69 @@ async def wakeMove(ctx: discord.Interaction, member: discord.Member, number: int
         await channel2.delete()
 #--------- end move ---------
 
+#--------- mic mute ---------
+@bot.tree.command(name="micmute", description="Set a timer.")
+async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, unit: str = 's'):  
+     
+    now = datetime.now()
+    units = {'s': 'seconds', 'm': 'minutes', 'h': 'hours'}
 
+    if unit not in units:
+        await ctx.response.defer(ephemeral=True)
+        await ctx.followup.send("❌ Invalid unit! Please use 's' for seconds, 'm' for minutes, or 'h' for hours.")
+        return
+    
+    # Defer response to allow time to process
+    await ctx.response.defer(ephemeral=True)
+
+    # Calculate target time
+    targetTime = now + timedelta(**{units[unit]: time})
+
+    # Inform the user and wait
+    if member.voice:
+        try:
+            await member.edit(mute=True)
+            await ctx.followup.send(f"You mute {member.mention} until {targetTime.strftime('%H:%M:%S')}")
+            await discord.utils.sleep_until(targetTime)
+            await member.edit(mute=False)
+            await ctx.followup.send(f"Unmute! {member.mention}")
+        except Exception as e:
+            await ctx.followup.send(f"Error! {e}")
+    else:
+        await ctx.followup.send(f"{member.mention} not in a voice room")
+#--------- end mic mute ---------
+
+#--------- headphone mute ---------
+@bot.tree.command(name="headphonemute", description="Set a timer.")
+async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, unit: str = 's'):  
+     
+    now = datetime.now()
+    units = {'s': 'seconds', 'm': 'minutes', 'h': 'hours'}
+
+    if unit not in units:
+        await ctx.response.defer(ephemeral=True)
+        await ctx.followup.send("❌ Invalid unit! Please use 's' for seconds, 'm' for minutes, or 'h' for hours.")
+        return
+    
+    # Defer response to allow time to process
+    await ctx.response.defer(ephemeral=True)
+
+    # Calculate target time
+    targetTime = now + timedelta(**{units[unit]: time})
+
+    # Inform the user and wait
+    if member.voice:
+        try:
+            await member.edit(deafen=True)
+            await ctx.followup.send(f"You mute {member.mention} until {targetTime.strftime('%H:%M:%S')}")
+            await discord.utils.sleep_until(targetTime)
+            await member.edit(deafen=False)
+            await ctx.followup.send(f"Unmute! {member.mention}")
+        except Exception as e:
+            await ctx.followup.send(f"Error! {e}")
+    else:
+        await ctx.followup.send(f"{member.mention} not in a voice room")
+#--------- end headphone mute ---------
 
 
 #--------- call tah ---------
