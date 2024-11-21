@@ -35,25 +35,28 @@ async def _ready(ctx):
 #--------- help ---------
 embedColor = 0xAC7BB8
 def emmbedShow():
-    text = [["/help", ": Provides help or detailed information about available commands."],
-            ["/move", ": Used to wake up friends."],
-            ["/stop", ": Stops or cancels the current process or action of the bot."],
-            ["/invite", ": Generates or shares a specific link or connection."],
-            ["/micmute", ": Mute microphone with a timer."],
-            ["/headphonemute", ": Mute the headphones with a timer."]]
+    text = {"/help": "Provides help or detailed information about available commands.",
+            "/move": "Used to wake up friends.",
+            "/stop": "Stops or cancels the current process or action of the bot.",
+            "/invite": "Generates or shares a specific link or connection.",
+            "/micmute": "Mute microphone with a timer.",
+            "/headphonemute": "Mute the headphones with a timer.",
+    }
     
+    helpText = ""
+    for key, value in text.items():
+        helpText += f"**{key}** : {value}\n"
+
     emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
-        description=f'**Commands with "\\\\" prefix :**\n**\help**{text[0][1]}\n**\stop**{text[2][1]}\n\n'
-                    f'**Recommend** ↓\n'
-                    f'**Slash Commands with "/" prefix :**\n'
-                    f'**{text[0][0]}** {text[0][1]}\n'
-                    f'**{text[1][0]}** {text[1][1]}\n'
-                    f'**{text[2][0]}** {text[2][1]}\n'
-                    f'**{text[3][0]}** {text[3][1]}\n'
-                    f'**{text[4][0]}** {text[4][1]}\n'
-                    f'**{text[5][0]}** {text[5][1]}\n'
-                    '\n**⚠️ Important :\n ถ้าคนที่ Poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ**\n',
+        description=("**Commands with '\\\\' prefix:**\n"
+                    "**\\help** : Provides help or detailed information about available commands.\n"
+                    "**\\stop** : Stops or cancels the current process or action of the bot.\n\n"
+                    "**Recommend** ↓\n"
+                    "**Slash Commands with '/' prefix:**\n"
+                    f"{helpText}\n"
+                    "**⚠️ Important:**\n"
+                    "ถ้าคนที่ Poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ"),
         color = embedColor,
         timestamp = discord.utils.utcnow()
     )
