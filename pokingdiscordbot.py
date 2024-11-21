@@ -139,8 +139,10 @@ async def wakeMove(ctx: discord.Interaction, member: discord.Member, number: int
     originalChannel = member.voice.channel
     try:
         await ctx.followup.send(f"{ctx.user.name} move {member.mention} {number} times")  # Initial response
-        channel1 = await ctx.guild.create_voice_channel("Poke room 1")
-        channel2 = await ctx.guild.create_voice_channel("Poke room 2")
+        room1 = "Poke room 1"
+        room2 = "Poke room 2"
+        channel1 = await ctx.guild.create_voice_channel(room1)
+        channel2 = await ctx.guild.create_voice_channel(room2)
 
         for attempt in range(number):
             if not stopLoop:
@@ -156,19 +158,26 @@ async def wakeMove(ctx: discord.Interaction, member: discord.Member, number: int
         await member.move_to(originalChannel)
         await member.send(f"{member.mention} We tried to wake you up!")
     except Forbidden:
-        await ctx.followup.send(f"You must have given the bot permission in your private room.")
+        await ctx.followup.send(f"You must have given the bot permission in your private room.", ephemeral=True)
+        
         # Choose an existing voice channel to move the member to (e.g., "General" or any channel in the server)
         existingCannel = None
+     
         for channel in ctx.guild.voice_channels:
             # Check if the bot has permission to move members in this channel
             if channel.permissions_for(ctx.guild.me).move_members:
                 existingCannel = channel
                 break
-        if existingCannel:
+
+        # existingCannel always true 
+        if existingCannel and existingCannel.name not in [room1, room2]:
             await member.move_to(existingCannel)
-            await ctx.followup.send(f"{member.mention} has been moved to {existingCannel.name}.")
+            await ctx.followup.send(f"{member.mention} has been moved to {existingCannel.name}.", ephemeral=True)
+            return
         else:
-            await ctx.followup.send("No suitable channel found to move the member.")
+            await ctx.followup.send("There is no channel that the bot has access to.", ephemeral=True)
+            return
+        
     except Exception as e:
         await ctx.followup.send(f"Error: {e}")
     finally:
