@@ -153,10 +153,11 @@ async def wakeMove(ctx: discord.Interaction, member: discord.Member, number: int
                 await asyncio.sleep(1)  # Wait for 1 second
                 await member.move_to(channel2)
 
+
         # Move back to the original channel
         stopLoop = False
-        await member.move_to(originalChannel)
         await member.send(f"{member.mention} We tried to wake you up!")
+        await member.move_to(originalChannel)
     except Forbidden:
         await ctx.followup.send(f"You must have given the bot permission in your private room.", ephemeral=True)
         
