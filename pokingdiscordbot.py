@@ -215,7 +215,7 @@ async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, 
             await member.edit(mute=False)
             await ctx.followup.send(f"Unmute! {member.mention}")
         except Exception as e:
-            await ctx.followup.send(f"Error! {e}")
+            await ctx.followup.send(f"Error! {e}", ephemeral=True)
     else:
         await ctx.followup.send(f"{member.mention} not in a voice room")
 #--------- end mic mute ---------
@@ -247,7 +247,7 @@ async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, 
             await member.edit(deafen=False)
             await ctx.followup.send(f"Unmute! {member.mention}")
         except Exception as e:
-            await ctx.followup.send(f"Error! {e}")
+            await ctx.followup.send(f"Error! {e}", ephemeral=True)
     else:
         await ctx.followup.send(f"{member.mention} not in a voice room")
 #--------- end headphone mute ---------
