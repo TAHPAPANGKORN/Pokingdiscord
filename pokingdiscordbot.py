@@ -13,18 +13,17 @@ bot = commands.Bot(command_prefix="\\", intents=discord.Intents.all(),help_comma
 TOKEN = os.environ.get('token')
 
 
-status = ['Just Find A AFK Member','Move AKF Member']
+status = "/help afk poke bot"
 stopLoop = None
 
 #--------- check ---------
 @bot.event
 async def on_ready():
-    global text
-    text = "Now online!!"
-    print(text)
-    await bot.change_presence(status=discord.Status.idle,activity=discord.Game(status[0])) #bot status when start
+    print("Now online!!")
+    activity = discord.Activity(type=discord.ActivityType.playing, name=status)
+    await bot.change_presence(activity=activity)
     synced = await bot.tree.sync()
-    print(f'{len(synced)} command(s)')
+    print(f'{len(synced)} command(s) Logged in as {bot.user}')
 
 @bot.command(aliases=['ready','start'])
 async def _ready(ctx):
@@ -42,10 +41,15 @@ def emmbedShow():
             "/micmute": "Mute microphone with a timer.",
             "/headphonemute": "Mute the headphones with a timer.",
     }
-    
+    appsText = {"Poke Until Stop": "Keep poking until you click stop",
+                "Stop Poke": "Stop the poke action and prevent further poking until resumed"
+    }
     helpText = ""
+    helpAppsText = ""
     for key, value in text.items():
         helpText += f"**{key}** : {value}\n"
+    for key, value in appsText.items():
+        helpAppsText += f"**{key}** : {value}\n" 
 
     emmbed = discord.Embed(
         title='Help Me! - Bot Commands',
@@ -55,6 +59,8 @@ def emmbedShow():
                     "**Recommend** ↓\n"
                     "**Slash Commands with '/' prefix:**\n"
                     f"{helpText}\n"
+                    "**Apps menu**\n"
+                    f"{helpAppsText}\n"
                     "**⚠️ Important:**\n"
                     "ถ้าคนที่ Poke ไม่ได้เปิดการแจ้งเตือนจะทำงานได้ไม่เต็มประสิทธิภาพ"),
         color = embedColor,
@@ -76,7 +82,7 @@ async def _help(ctx: discord.Interaction):
 #--------- end help ---------
 
 #--------- link ---------
-botLink = "https://discord.com/oauth2/authorize?client_id=1208764608727359601&permissions=29361168&integration_type=0&scope=bot"
+botLink = "https://discord.com/oauth2/authorize?client_id=1208764608727359601"
 @bot.tree.command(name='invite', description='Get Link To Invite')
 async def sendLink(ctx: discord.Interaction):
     await ctx.response.defer(ephemeral=True)
@@ -189,10 +195,80 @@ async def wakeMove(ctx: discord.Interaction, member: discord.Member, number: int
         stopLoop = None
         await channel1.delete()
         await channel2.delete()
+
+@bot.tree.context_menu(name="Poke Until Stop")
+async def menuWakeMove(ctx: discord.Interaction, member: discord.Member):
+    global stopLoop, nameMember
+    number = 4
+    nameMember = member.name
+
+    # Acknowledge the interaction immediately
+    await ctx.response.defer(ephemeral=True)
+   
+    if number <= 0:
+        await ctx.followup.send("Please specify the number of rounds greater than 0!")
+        return
+    if not member.voice:
+        await ctx.followup.send(f"{member.mention} Not In Voice Channel!")
+        return
+
+    originalChannel = member.voice.channel
+    try:
+        await ctx.followup.send(f"{ctx.user.name} move {member.mention} until stop")  # Initial response
+        room1 = "Poke room 1"
+        room2 = "Poke room 2"
+        channel1 = await ctx.guild.create_voice_channel(room1)
+        channel2 = await ctx.guild.create_voice_channel(room2)
+
+        count = 1
+        while True:
+            await asyncio.gather(
+                member.send(f"{ctx.user.mention} Calling you for the {count} time"),
+                member.move_to(channel1)
+            )
+            await asyncio.sleep(1)  # Wait for 1 second
+            await member.move_to(channel2)
+            count += 1
+            if stopLoop and userStop == member or count >= 500:
+                break
+                
+
+        # Move back to the original channel
+        stopLoop = False
+        await member.send(f"{member.mention} We tried to wake you up!")
+        await member.move_to(originalChannel)
+    except Forbidden:
+        await ctx.followup.send(f"You must have given the bot permission in your private room.", ephemeral=True)
+        
+        # Choose an existing voice channel to move the member to (e.g., "General" or any channel in the server)
+        existingCannel = None
+     
+        for channel in ctx.guild.voice_channels:
+            # Check if the bot has permission to move members in this channel
+            if channel.permissions_for(ctx.guild.me).move_members:
+                existingCannel = channel
+                break
+
+        #existingCannel always true 
+        if existingCannel and existingCannel.name not in [room1, room2]:
+            await member.move_to(existingCannel)
+            await ctx.followup.send(f"{member.mention} has been moved to {existingCannel.name}.", ephemeral=True)
+            return
+        else:
+            await ctx.followup.send("There is no channel that the bot has access to.", ephemeral=True)
+            return
+        
+    except Exception as e:
+        await ctx.followup.send(f"Error: {e}", ephemeral=True)
+    finally:
+        # Clean up channels
+        stopLoop = None
+        await channel1.delete()
+        await channel2.delete()
 #--------- end move ---------
 
 #--------- mic mute ---------
-@bot.tree.command(name="micmute", description="Set a timer.")
+@bot.tree.command(name="micmute", description="Set time to mute microphone")
 async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, unit: str = 's'):  
      
     now = datetime.now(pytz.timezone('Asia/Bangkok'))
@@ -224,7 +300,7 @@ async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, 
 #--------- end mic mute ---------
 
 #--------- headphone mute ---------
-@bot.tree.command(name="headphonemute", description="Set a timer.")
+@bot.tree.command(name="headphonemute", description="Set time to mute headphone.")
 async def muteTime(ctx: discord.Interaction, member: discord.Member, time: int, unit: str = 's'):  
      
     now = datetime.now(pytz.timezone('Asia/Bangkok'))
@@ -311,6 +387,18 @@ async def stop(ctx: discord.Interaction):
         await ctx.followup.send(f'You stop poke {nameMember}.', ephemeral=True)
     else:
         await ctx.followup.send('There is no trigger currently operating.', ephemeral=True)
+
+@bot.tree.context_menu(name="Stop Poke")
+async def menuStop(ctx: discord.Interaction, user: discord.User):
+    global stopLoop, userStop
+    await ctx.response.defer(ephemeral=True)
+    
+    # Stop the loop
+    userStop = user
+    stopLoop = True
+    if nameMember == userStop:
+        await ctx.followup.send(f'You stop poke {nameMember}.', ephemeral=True)
+        await ctx.followup.send('Please press stop on the person being poke.', ephemeral=True)
 #--------- end stop ---------
 
 
